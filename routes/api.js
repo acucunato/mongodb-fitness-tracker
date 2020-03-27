@@ -9,10 +9,32 @@
 
 // * View multiple the combined weight of multiple exercises on the `stats` page.
 
-var path = require("path");
+const db = require("../models");
 
 module.exports = function(app) {
   // api/workouts
-  // api/workouts:id
+  app.get("/api/workouts", (req, res) => {
+    db.Workout.find({})
+      .then(workout => {
+        res.json(workout);
+      })
+      .catch(err => {
+        res.json(err);
+      });
+  });
+
+  //api/workouts POST creates a new workout
+
+  // api/workouts/:id
+
   // api/workouts/range
+  app.get("/api/workouts/range", (req, res) => {
+    db.Workout.find({})
+      .then(workout => {
+        res.json(workout);
+      })
+      .catch(err => {
+        res.json(err);
+      });
+  });
 };
