@@ -1,14 +1,3 @@
-// Routes
-// When the user loads the page, they should be given the option to create a new workout, or continue with their last workout.
-
-// The user should be able to:
-
-// * Add exercises to a previous workout plan.
-
-// * Add new exercises to a new workout plan.
-
-// * View multiple the combined weight of multiple exercises on the `stats` page.
-
 const db = require("../models");
 
 module.exports = function(app) {
@@ -16,6 +5,7 @@ module.exports = function(app) {
   app.get("/api/workouts", (req, res) => {
     db.Workout.find({})
       .then(workout => {
+        console.log(workout);
         res.json(workout);
       })
       .catch(err => {
@@ -24,8 +14,29 @@ module.exports = function(app) {
   });
 
   //api/workouts POST creates a new workout
+  app.post("/api/workouts", ({ body }, res) => {
+    db.Workout.create(body)
+      .then(workout => {
+        res.json(workout);
+      })
+      .catch(err => {
+        res.json(err);
+      });
+  });
 
-  // api/workouts/:id
+  // PUT route updates exercises by id
+  app.put("/api/workouts/:id", (req, res) => {
+    db.Workout.updateOne(
+      { _id: req.params.id },
+      { $push: { exercises: req.body } }
+    )
+      .then(workout => {
+        res.json(workout);
+      })
+      .catch(err => {
+        res.json(err);
+      });
+  });
 
   // api/workouts/range
   app.get("/api/workouts/range", (req, res) => {
